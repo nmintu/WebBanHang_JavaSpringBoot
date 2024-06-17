@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Update Product</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+<section layout:fragment="content" class="container mt-5">
+    <h1>Update Product</h1>
+    <form th:action="@{|/products/update/${product.id}|}" th:object="${product}" method="post"
+          class="needs-validation" novalidate enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" th:field="*{name}" class="form-control" id="name"
+                   required>
+            <div class="text-danger" th:if="${#fields.hasErrors('name')}"
+                 th:errors="*{name}"></div>
+        </div>
+        <div class="mb-3">
+            <label for="price" class="form-label">Price:</label>
+            <input type="text" th:field="*{price}" class="form-control" id="price"
+                   required>
+        </div>
+        <div class="mb-3">
+            <label for="quantity" class="form-label">Quantity:</label>
+            <input type="text" th:field="*{quantity}" class="form-control" id="quantity"
+                   required>
+            <div class="text-danger" th:if="${#fields.hasErrors('quantity')}"
+                 th:errors="*{quantity}"></div>
+        </div>
+        <div class="mb-3">
+            <label for="category" class="form-label">Category:</label>
+            <select th:field="*{category}" class="form-control" id="category">
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}" th:text="${category.name}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description:</label>
+            <textarea th:field="*{description}" class="form-control"
+                      id="description" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="images" class="form-label">Images:</label>
+            <input type="file" name="images" id="images" class="form-control"
+                   multiple>
+        </div>
+
+        <!-- Hiển thị danh sách các ảnh hiện tại và checkbox để chọn ảnh cần xóa -->
+        <div>
+            <h4>Current Images:</h4>
+            <div th:each="image, status : ${product.imageUrls}">
+                <img th:src="@{${image}}" class="img-thumbnail" style="width: 100px; height: 100px;"/>
+                <input type="checkbox" name="imagesToDelete" th:value="${image}" class="form-check-input">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Product</button>
+    </form>
+</section>
+</body>
+</html>
